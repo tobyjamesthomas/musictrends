@@ -1,9 +1,9 @@
-,artist,num_lines,sentiment,tags,f_k_grade,year,pos,num_syllables,difficult_words,fog_index,title,num_dupes,flesch_index,num_words,sentiment_neg,sentiment_neu,sentiment_pos,sentiment_compound
-0,Nat King Cole,17,"{'neg': 0.155, 'neu': 0.646, 'pos': 0.199, 'compound': 0.8443}","['jazz', 'pop', 'swing']",2.9,1950,2,189.0,13,5.2,Mona Lisa,10,88.74,145,0.155,0.646,0.199,0.8443
-1,Andrews Sisters,31,"{'neg': 0.036000000000000004, 'neu': 0.74, 'pos': 0.224, 'compound': 0.9897}",[],3.3,1950,17,270.9,40,4.4,I Wanna Be Loved,32,82.31,189,0.036000000000000004,0.74,0.224,0.9897
-2,Patti Page,16,"{'neg': 0.053, 'neu': 0.596, 'pos': 0.35100000000000003, 'compound': 0.9948}","['country', 'pop']",2.9,1950,18,174.6,5,5.2,Tennessee Waltz,10,88.74,138,0.053,0.596,0.35100000000000003,0.9948
-3,Tennessee Ernie Ford,18,"{'neg': 0.167, 'neu': 0.602, 'pos': 0.231, 'compound': 0.8842000000000001}",[],0.9,1950,20,135.9,10,4.4,I'll Never Be Free,3,99.23,117,0.167,0.602,0.231,0.8842000000000001
-4,Patti Page,3,"{'neg': 0.07, 'neu': 0.85, 'pos': 0.079, 'compound': 0.0772}","['country', 'pop']",6.0,1950,21,46.8,9,6.0,All My Love,0,69.79,32,0.07,0.85,0.079,0.0772
-5,Perry Como,54,"{'neg': 0.04, 'neu': 0.779, 'pos': 0.182, 'compound': 0.9941000000000001}","['country', 'jazz', 'pop', 'rock', 'swing']",0.1,1950,25,423.0,22,4.800000000000001,Hoop-Dee-Doo,22,106.67,382,0.04,0.779,0.182,0.9941000000000001
-6,Bing Crosby,39,"{'neg': 0.0, 'neu': 0.588, 'pos': 0.41200000000000003, 'compound': 0.999}","['jazz', 'pop']",2.1,1950,29,303.3,12,4.4,Dear Hearts And Gentle People,17,90.77,239,0.0,0.588,0.41200000000000003,0.999
-7,Frankie Laine,40,"{'neg': 0.038, 'neu': 0.881, 'pos': 0.081, 'compound': 0.9238000000000001}",[],0.1,1950,30,350.1,15,4.800000000000001,Cry Of The Wild Goose,18,106.67,306,0.038,0.881,0.081,0.9238000000000001
+,artist,num_lines,sentiment,tags,f_k_grade,year,pos,num_syllables,difficult_words,fog_index,title,num_dupes,flesch_index,num_words,sentiment_neg,sentiment_neu,sentiment_pos,sentiment_compound,genre
+0,Nat King Cole,17,"{'neg': 0.155, 'neu': 0.646, 'pos': 0.199, 'compound': 0.8443}","['jazz', 'pop', 'swing']",2.9,1950,2,189.0,13,5.2,Mona Lisa,10,88.74,145,0.155,0.646,0.199,0.8443,jazz
+1,Andrews Sisters,31,"{'neg': 0.036000000000000004, 'neu': 0.74, 'pos': 0.224, 'compound': 0.9897}",[],3.3,1950,17,270.9,40,4.4,I Wanna Be Loved,32,82.31,189,0.036000000000000004,0.74,0.224,0.9897,none
+2,Patti Page,16,"{'neg': 0.053, 'neu': 0.596, 'pos': 0.35100000000000003, 'compound': 0.9948}","['country', 'pop']",2.9,1950,18,174.6,5,5.2,Tennessee Waltz,10,88.74,138,0.053,0.596,0.35100000000000003,0.9948,country
+3,Tennessee Ernie Ford,18,"{'neg': 0.167, 'neu': 0.602, 'pos': 0.231, 'compound': 0.8842000000000001}",[],0.9,1950,20,135.9,10,4.4,I'll Never Be Free,3,99.23,117,0.167,0.602,0.231,0.8842000000000001,none
+4,Patti Page,3,"{'neg': 0.07, 'neu': 0.85, 'pos': 0.079, 'compound': 0.0772}","['country', 'pop']",6.0,1950,21,46.8,9,6.0,All My Love,0,69.79,32,0.07,0.85,0.079,0.0772,country
+5,Perry Como,54,"{'neg': 0.04, 'neu': 0.779, 'pos': 0.182, 'compound': 0.9941000000000001}","['country', 'jazz', 'pop', 'rock', 'swing']",0.1,1950,25,423.0,22,4.800000000000001,Hoop-Dee-Doo,22,106.67,382,0.04,0.779,0.182,0.9941000000000001,country
+6,Bing Crosby,39,"{'neg': 0.0, 'neu': 0.588, 'pos': 0.41200000000000003, 'compound': 0.999}","['jazz', 'pop']",2.1,1950,29,303.3,12,4.4,Dear Hearts And Gentle People,17,90.77,239,0.0,0.588,0.41200000000000003,0.999,jazz
+7,Frankie Laine,40,"{'neg': 0.038, 'neu': 0.881, 'pos': 0.081, 'compound': 0.9238000000000001}",[],0.1,1950,30,350.1,15,4.800000000000001,Cry Of The Wild Goose,18,106.67,306,0.038,0.881,0.081,0.9238000000000001,none
