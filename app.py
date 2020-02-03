@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import dash
-import dash_table
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
@@ -9,10 +8,10 @@ import pandas as pd
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+app.title = 'Music Trends'
 
 songs = pd.read_csv('data/data.csv')
 df = songs.groupby(['genre', 'year'], as_index = False).mean()
-songs = songs[['title', 'artist', 'year', 'pos', 'genre']]
 
 measurements = {
     'num_lines': 'Number of lines',
@@ -36,12 +35,24 @@ measurements = {
     'duration_ms': 'Duration in miliseconds',
 }
 
-colors = [
-    "#3366cc", "#dc3912", "#ff9900", "#109618",
-    "#990099", "#0099c6", "#dd4477", "#66aa00",
-    "#b82e2e", "#316395", "#994499", "#22aa99",
-    "#aaaa11", "#6633cc", "#e67300", '#000000'
-]
+colors = {
+    'alternative/indie': '#3366cc',
+    'blues': '#dc3912',
+    'classical/soundtrack': '#ff9900',
+    'country': '#109618',
+    'disco': '#990099',
+    'electronic/dance': '#0099c6',
+    'folk': '#dd4477',
+    'hip-hop/rnb': '#66aa00',
+    'jazz': '#b82e2e',
+    'pop': '#316395',
+    'reggae': '#994499',
+    'religious': '#22aa99',
+    'rock': '#aaaa11',
+    'soul': '#6633cc',
+    'swing': '#e67300',
+    'none': '#cccccc'
+}
 
 app.layout = html.Div([
 
@@ -80,12 +91,7 @@ app.layout = html.Div([
         allowCross=False,
     ),
 
-    dash_table.DataTable(
-        id='music-table',
-        columns=[
-            {'name': i, 'id': i} for i in songs.columns
-        ],
-    ),
+    dcc.Graph(id='music-billboard'),
 ])
 
 @app.callback(
@@ -95,41 +101,67 @@ app.layout = html.Div([
     Input('year-slider', 'value')])
 def update_graph(genres, measurement, year_range):
 
+    dff = df
+    data = []
     years = [i for i in range(year_range[0], year_range[1]+1)]
-    dff = df[df.genre.isin(genres) & df.year.isin(years)]
+    for genre in genres:
+        tracks = df[(df['genre'] == genre) & df['year'].isin(years)]
+
+        data.append(dict(
+            x = tracks['year'],
+            y = tracks[measurement],
+            opacity = 0.7,
+            marker = {'color': colors[genre]},
+            name = genre
+        ))
 
     return {
-        'data': [
-            dict(
-                x=dff[dff['genre'] == genre]['year'],
-                y=dff[dff['genre'] == genre][measurement],
-                opacity=0.7,
-                mode='lines',
-                marker=dict(color = colors[i]),
-                name=genre
-            ) for i, genre in enumerate(genres)
-        ],
+        'data': data,
         'layout': dict(
             xaxis={'title': 'Year'},
             yaxis={'title': measurements[measurement]},
             margin={'l': 40, 'b': 40, 't': 10, 'r': 10},
-            line={'shape': 'spline', 'smoothing': 10},
             hovermode='closest'
         )
     }
 
 @app.callback(
-    Output('music-table', 'data'),
+    Output('music-billboard', 'figure'),
     [Input('genres', 'value'),
-    Input('measurement', 'value'),
     Input('year-slider', 'value')])
-def update_table(genres, measurement, year_range):
+def update_graph(genres, year_range):
 
+    df = songs
+    data = []
     years = [i for i in range(year_range[0], year_range[1]+1)]
-    df = songs[songs.genre.isin(genres) & songs.year.isin(years)]
-    df = df.sort_values(by = ['year', 'pos'])
+    for genre in genres:
+        tracks = df[(df['genre'] == genre) & df['year'].isin(years)]
 
-    return df.to_dict('records')
+        text = tracks['title'] + ' by ' + tracks['artist']
+
+        data.append(dict(
+            x = tracks['year'],
+            y = tracks['pos'],
+            text = text,
+            mode = 'markers',
+            opacity = 0.7,
+            marker = {
+                'size': 10,
+                'color': colors[genre],
+            },
+            name = genre
+        ))
+
+    return {
+        'data': data,
+        'layout': dict(
+            xaxis={'title': 'Year'},
+            yaxis={'title': 'Billboard Position', 'autorange': 'reversed'},
+            margin={'l': 40, 'b': 40, 't': 10, 'r': 10},
+            hovermode='closest'
+        )
+    }
+
 
 if __name__ == '__main__':
     app.run_server(debug = True)

@@ -1,0 +1,25 @@
+/* Table of contents
+––––––––––––––––––––––––––––––––––––––––––––––––––
+- Base Styles
+- Spacing
+*/
+
+/* Base Styles
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+html {
+  font-size: 62.5%; }
+body {
+  max-width: 960px;
+  padding: 0 30px;
+  margin: auto; }
+
+/* Spacing
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+#_dash-app-content {
+  padding-top: 30px; }
+#genres,
+#measurement,
+#music-trends,
+#year-slider,
+#music-billboard {
+  margin-bottom: 30px; }
