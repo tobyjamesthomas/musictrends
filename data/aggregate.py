@@ -7,6 +7,7 @@ client_credentials_manager = SpotifyClientCredentials(
     client_id="3f0028fc55bd49a3b849878769d8f1d4",
     client_secret="704b7b3da68248439a49c70d1dc34a3a"
 )
+
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 df = pd.read_json('raw/data.json')
