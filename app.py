@@ -65,7 +65,7 @@ app.layout = html.Div([
         html.Div([
             html.A('About this dataset', className='button', href='#about-modal'),
         ], className='modal-button'),
-        
+
         html.Div([
             html.A('Generate a playlist', className='button', href='#playlist-modal'),
         ], className='modal-button'),
@@ -141,6 +141,11 @@ app.layout = html.Div([
                 html.A('Flask', href = 'https://www.fullstackpython.com/flask.html'),
                 ' and ',
                 html.A('Plot.ly', href = 'https://plot.ly/'),
+                '.',
+            ]),
+            html.P([
+                'View this project on ',
+                html.A('Github', href = 'https://github.com/tobyjamesthomas/musictrends'),
                 '.',
             ]),
         ]),
@@ -239,8 +244,8 @@ def update_playlist(genres, year_range, n_clicks):
 
     years = [i for i in range(year_range[0], year_range[1]+1)]
 
-    playlist = songs[songs[
-        'genre'].isin(genres)
+    playlist = songs[
+        songs['genre'].isin(genres)
         & songs['year'].isin(years)
         & songs['spotify_url']]
     playlist = playlist.sample(min(len(playlist), 10))
