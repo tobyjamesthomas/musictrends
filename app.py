@@ -10,8 +10,9 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
-df = pd.read_csv('data/data.csv')
-dfg = df.groupby(['genre', 'year'], as_index = False).mean()
+songs = pd.read_csv('data/data.csv')
+df = songs.groupby(['genre', 'year'], as_index = False).mean()
+songs = songs[['title', 'artist', 'year', 'pos', 'genre']]
 
 measurements = {
     'num_lines': 'Number of lines',
@@ -47,8 +48,8 @@ app.layout = html.Div([
     html.Label('Genres'),
     dcc.Dropdown(
         id='genres',
-        options=[{'label': i, 'value': i} for i in dfg.genre.unique()],
-        value=[i for i in dfg.genre.unique()],
+        options=[{'label': i, 'value': i} for i in df.genre.unique()],
+        value=[i for i in df.genre.unique()],
         multi=True,
     ),
 
@@ -78,6 +79,13 @@ app.layout = html.Div([
         value=[1950, 2015],
         allowCross=False,
     ),
+
+    dash_table.DataTable(
+        id='music-table',
+        columns=[
+            {'name': i, 'id': i} for i in songs.columns
+        ],
+    ),
 ])
 
 @app.callback(
@@ -88,7 +96,7 @@ app.layout = html.Div([
 def update_graph(genres, measurement, year_range):
 
     years = [i for i in range(year_range[0], year_range[1]+1)]
-    dff = dfg[dfg.genre.isin(genres) & dfg.year.isin(years)]
+    dff = df[df.genre.isin(genres) & df.year.isin(years)]
 
     return {
         'data': [
@@ -110,6 +118,18 @@ def update_graph(genres, measurement, year_range):
         )
     }
 
+@app.callback(
+    Output('music-table', 'data'),
+    [Input('genres', 'value'),
+    Input('measurement', 'value'),
+    Input('year-slider', 'value')])
+def update_table(genres, measurement, year_range):
+
+    years = [i for i in range(year_range[0], year_range[1]+1)]
+    df = songs[songs.genre.isin(genres) & songs.year.isin(years)]
+    df = df.sort_values(by = ['year', 'pos'])
+
+    return df.to_dict('records')
 
 if __name__ == '__main__':
     app.run_server(debug = True)
