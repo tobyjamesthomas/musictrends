@@ -26,7 +26,6 @@ scipy==1.4.1
 selenium==3.14.0
 six==1.13.0
 spotipy==2.7.1
-TBB==0.1
 urllib3==1.23
 weather-api==1.0.4
 Werkzeug==0.16.1
