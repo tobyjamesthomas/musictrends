@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import dash
+import dash_table
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
@@ -9,7 +10,8 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
-df = pd.read_csv('data/data.csv').groupby(['genre', 'year'], as_index = False).mean()
+df = pd.read_csv('data/data.csv')
+dfg = df.groupby(['genre', 'year'], as_index = False).mean()
 
 measurements = {
     'num_lines': 'Number of lines',
@@ -24,7 +26,13 @@ measurements = {
     'sentiment_neg': 'sentiment_neg',
     'sentiment_neu': 'sentiment_neu',
     'sentiment_pos': 'sentiment_pos',
-    'sentiment_compound': 'sentiment_compound'
+    'sentiment_compound': 'sentiment_compound',
+    'danceability': 'danceability',
+    'energy': 'energy',
+    'loudness': 'loudness',
+    'instrumentalness': 'instrumentalness',
+    'liveness': 'liveness',
+    'duration_ms': 'Duration in miliseconds',
 }
 
 colors = [
@@ -36,13 +44,15 @@ colors = [
 
 app.layout = html.Div([
 
+    html.Label('Genres'),
     dcc.Dropdown(
         id='genres',
-        options=[{'label': i, 'value': i} for i in df.genre.unique()],
-        value=[i for i in df.genre.unique()],
+        options=[{'label': i, 'value': i} for i in dfg.genre.unique()],
+        value=[i for i in dfg.genre.unique()],
         multi=True,
     ),
 
+    html.Label('Measurement'),
     dcc.Dropdown(
         id='measurement',
         options=[{'value': v, 'label': l} for v, l in measurements.items()],
@@ -67,7 +77,7 @@ app.layout = html.Div([
         },
         value=[1950, 2015],
         allowCross=False,
-    )
+    ),
 ])
 
 @app.callback(
@@ -78,7 +88,7 @@ app.layout = html.Div([
 def update_graph(genres, measurement, year_range):
 
     years = [i for i in range(year_range[0], year_range[1]+1)]
-    dff = df[df.genre.isin(genres) & df.year.isin(years)]
+    dff = dfg[dfg.genre.isin(genres) & dfg.year.isin(years)]
 
     return {
         'data': [
@@ -102,4 +112,4 @@ def update_graph(genres, measurement, year_range):
 
 
 if __name__ == '__main__':
-    app.run_server()
+    app.run_server(debug = True)
