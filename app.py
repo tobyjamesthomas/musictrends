@@ -16,6 +16,8 @@ songs = pd.read_csv('data/data.csv')
 
 df = songs.groupby(['genre', 'year'], as_index = False).mean()
 
+playlist = pd.DataFrame();
+
 measurements = {
     'num_lines': 'Number of lines',
     'f_k_grade': 'f_k_grade',
@@ -63,9 +65,13 @@ app.layout = html.Div([
 
     html.Div([
         html.Div([
-            html.A('About this data', className='button', href='#about'),
-        ], className='interior'),
-    ], className='modal-button'),
+            html.A('About this data', className='button', href='#about-modal'),
+        ], className='modal-button'),
+        
+        html.Div([
+            html.A('Generate playlist', className='button', href='#playlist-modal'),
+        ], className='modal-button'),
+    ], style = {'display': 'flex'}),
 
     html.Label('Genres'),
     dcc.Dropdown(
@@ -116,7 +122,16 @@ app.layout = html.Div([
                 This dataset originates from the Billboard\'s Top 100 songs over the years 1950-2015.
             '''),
         ]),
-    ], id='about', className='modal-window'),
+    ], id='about-modal', className='modal-window'),
+
+    html.Div([
+        html.Div([
+            html.A('Close', className='modal-close', title='close', href='#'),
+            html.Div(id = 'playlist'),
+            html.Button('Add to Apple Music (Coming Soon)', className = 'add-to-button disabled'),
+            html.Button('Add to Spotify', className = 'add-to-button', id = 'add-to-spotify', n_clicks = 0),
+        ]),
+    ], id='playlist-modal', className='modal-window'),
 ])
 
 @app.callback(
@@ -187,6 +202,39 @@ def update_graph(genres, year_range):
         )
     }
 
+@app.callback(
+    Output(component_id='playlist', component_property='children'),
+    [Input('genres', 'value'),
+    Input('year-slider', 'value')])
+def update_playlist(genres, year_range):
+    if len(genres) < 1:
+        return html.P('Please select a genre.')
+
+    years = [i for i in range(year_range[0], year_range[1]+1)]
+
+    playlist = songs[songs[
+        'genre'].isin(genres)
+        & songs['year'].isin(years)
+        & songs['spotify_url']]
+
+    playlist = playlist.sample(min(len(playlist), 10))
+
+    if len(playlist) < 1:
+        return html.P('Please widen your selection.')
+
+    song_list = [html.P(
+        "{} by {}".format(song['title'], song['artist'])
+    ) for i, song in playlist.iterrows()]
+
+    return [
+        html.H1("We sampled {} songs from your selection:".format(len(playlist)))
+    ] + song_list
+
+@app.callback(
+    Output(component_id='add-to-spotify', component_property='children'),
+    [Input('add-to-spotify', 'n_clicks')])
+def update_spotify(n_clicks):
+    return 'Added to Spotify' if n_clicks > 0 else 'Add to Spotify'
 
 if __name__ == '__main__':
     app.run_server(debug = True)

@@ -3,6 +3,7 @@
 - Base Styles
 - Spacing
 - Modal
+- Button
 - Footer
 */
 
@@ -23,8 +24,7 @@ h1 {
 #measurement,
 #music-trends,
 #year-slider,
-#music-billboard,
-.modal-button {
+#music-billboard {
   margin-bottom: 2rem; }
 
 /* Modal
@@ -78,14 +78,25 @@ h1 {
 .modal-close:hover {
   color: black; }
 .modal-window div:not(:last-of-type) {
-  margin-bottom: 15px; } 
+  margin-bottom: 15px; }
+.modal-button {
+  margin-bottom: 2rem;
+  margin-right: 2rem; }
 small {
   color: #aaa; }
+
+/* Button
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.add-to-button {
+  width: 100%;
+  margin-top: 2rem; }
+.disabled {
+  pointer-events: none;
+  background-color: #eeeeee; }
 
 /* Footer
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .footer {
   text-align: center;
   margin-top: 4rem;
-  margin-bottom: 2rem;
-}
+  margin-bottom: 2rem; }
