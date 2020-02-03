@@ -260,4 +260,4 @@ def update_playlist(genres, year_range, n_clicks):
 
 
 if __name__ == '__main__':
-    app.run_server(debug = True)
+    app.run_server()
