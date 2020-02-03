@@ -3,8 +3,10 @@
 - Base Styles
 - Spacing
 - Modal
+- Select
 - Button
 - Footer
+- Other
 */
 
 /* Base Styles
@@ -64,7 +66,7 @@ h1 {
   font-weight: bold; }
 .modal-window h1 {
   font-size: 150%;
-  margin: 0 0 15px; }
+  margin: 15px 0; }
 .modal-close {
   color: #aaa;
   line-height: 50px;
@@ -85,6 +87,11 @@ h1 {
 small {
   color: #aaa; }
 
+/* Select
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.Select-control {
+  overflow: auto; }
+
 /* Button
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .add-to-button {
@@ -92,7 +99,7 @@ small {
   margin-top: 2rem; }
 .disabled {
   pointer-events: none;
-  background-color: #eeeeee; }
+  background-color: rgba(0, 0, 0, 0.05); }
 
 /* Footer
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
@@ -100,3 +107,8 @@ small {
   text-align: center;
   margin-top: 4rem;
   margin-bottom: 2rem; }
+
+/* Other
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.hidden {
+  display: none; }

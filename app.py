@@ -16,28 +16,26 @@ songs = pd.read_csv('data/data.csv')
 
 df = songs.groupby(['genre', 'year'], as_index = False).mean()
 
-playlist = pd.DataFrame();
-
 measurements = {
-    'num_lines': 'Number of lines',
-    'f_k_grade': 'f_k_grade',
-    'pos': 'pos',
-    'num_syllables': 'num_syllables',
-    'difficult_words': 'difficult_words',
-    'fog_index': 'fog_index',
-    'num_dupes': 'num_dupes',
-    'flesch_index': 'flesch_index',
+    'pos': 'Billboard position',
+    'duration_ms': 'Duration (ms)',
     'num_words': 'Number of words',
-    'sentiment_neg': 'sentiment_neg',
-    'sentiment_neu': 'sentiment_neu',
-    'sentiment_pos': 'sentiment_pos',
-    'sentiment_compound': 'sentiment_compound',
-    'danceability': 'danceability',
-    'energy': 'energy',
-    'loudness': 'loudness',
-    'instrumentalness': 'instrumentalness',
-    'liveness': 'liveness',
-    'duration_ms': 'Duration in miliseconds',
+    'num_syllables': 'Number of syllables',
+    'num_lines': 'Number of lines',
+    'num_dupes': 'Number of duplicate lines',
+    'difficult_words': 'Number of difficult words',
+    'flesch_index': 'Flesch readability index (100 = Pre-K, 0 = Impossible)',
+    'f_k_grade': 'Flesch-Kincaid readability index (Grade level required to read lyrics)',
+    'fog_index': 'Gunning-Fog readability index (Grade level required to read lyrics)',
+    'sentiment_pos': 'Positive sentiment (How happy the lyrics are)',
+    'sentiment_neu': 'Neutral sentiment',
+    'sentiment_neg': 'Negative sentiment (How sad the lyrics are)',
+    'sentiment_compound': 'Sentiment (Compound)',
+    'danceability': 'Danceability',
+    'energy': 'Energy',
+    'loudness': 'Loudness',
+    'instrumentalness': 'Instrumentalness',
+    'liveness': 'Liveness',
 }
 
 colors = {
@@ -65,11 +63,11 @@ app.layout = html.Div([
 
     html.Div([
         html.Div([
-            html.A('About this data', className='button', href='#about-modal'),
+            html.A('About this dataset', className='button', href='#about-modal'),
         ], className='modal-button'),
         
         html.Div([
-            html.A('Generate playlist', className='button', href='#playlist-modal'),
+            html.A('Generate a playlist', className='button', href='#playlist-modal'),
         ], className='modal-button'),
     ], style = {'display': 'flex'}),
 
@@ -81,7 +79,7 @@ app.layout = html.Div([
         multi=True,
     ),
 
-    html.Label('Measurement'),
+    html.Label('Measurement (for the average song in that year and genre)'),
     dcc.Dropdown(
         id='measurement',
         options=[{'value': v, 'label': l} for v, l in measurements.items()],
@@ -104,7 +102,7 @@ app.layout = html.Div([
             2000: '2000',
             2010: '2010',
         },
-        value=[1950, 2015],
+        value=[1970, 1990],
         allowCross=False,
     ),
 
@@ -118,9 +116,33 @@ app.layout = html.Div([
         html.Div([
             html.A('Close', className='modal-close', title='close', href='#'),
             html.H1('Data'),
-            html.P('''
-                This dataset originates from the Billboard\'s Top 100 songs over the years 1950-2015.
-            '''),
+            html.P([
+                'This dataset comes from ',
+                html.A('Billboard', href = 'https://github.com/kevinschaich/billboard/tree/master/data'),
+                '''
+                and explores how music popular has evolved over the past few decades
+                by analyzing the lyrics and musical composition of the Billboard's Top 100 songs
+                over the years 1950-2015.
+                ''',
+            ]),
+            html.P([
+                'Further analysis has been made using ',
+                html.A('Spotify API', href = 'https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/'),
+                ' to add metrics such as song duration, instrumentalness and danceability.',
+            ]),
+            html.P([
+                'This project was created by ',
+                html.A('Toby Thomas', href = 'https://github.com/tobyjamesthomas'),
+                ' and is built with ',
+                html.A('Python', href = 'https://www.python.org/'),
+                ', ',
+                html.A('pandas', href = 'https://pandas.pydata.org/'),
+                ', ',
+                html.A('Flask', href = 'https://www.fullstackpython.com/flask.html'),
+                ' and ',
+                html.A('Plot.ly', href = 'https://plot.ly/'),
+                '.',
+            ]),
         ]),
     ], id='about-modal', className='modal-window'),
 
@@ -128,8 +150,11 @@ app.layout = html.Div([
         html.Div([
             html.A('Close', className='modal-close', title='close', href='#'),
             html.Div(id = 'playlist'),
-            html.Button('Add to Apple Music (Coming Soon)', className = 'add-to-button disabled'),
-            html.Button('Add to Spotify', className = 'add-to-button', id = 'add-to-spotify', n_clicks = 0),
+            html.Div([
+                html.Button('Reshuffle', className = 'add-to-button', id = 'reshuffle', n_clicks = 0),
+                html.Button('Add to Apple Music (Coming Soon)', className = 'add-to-button disabled'),
+                html.Button('Add to Spotify (Coming Soon)', className = 'add-to-button disabled'),
+            ], id = 'export-buttons')
         ]),
     ], id='playlist-modal', className='modal-window'),
 ])
@@ -203,12 +228,14 @@ def update_graph(genres, year_range):
     }
 
 @app.callback(
-    Output(component_id='playlist', component_property='children'),
+    [Output(component_id='playlist', component_property='children'),
+    Output(component_id='export-buttons', component_property='className')],
     [Input('genres', 'value'),
-    Input('year-slider', 'value')])
-def update_playlist(genres, year_range):
+    Input('year-slider', 'value'),
+    Input('reshuffle', 'n_clicks')])
+def update_playlist(genres, year_range, n_clicks):
     if len(genres) < 1:
-        return html.P('Please select a genre.')
+        return html.P('Please select a genre.'), 'hidden'
 
     years = [i for i in range(year_range[0], year_range[1]+1)]
 
@@ -216,25 +243,21 @@ def update_playlist(genres, year_range):
         'genre'].isin(genres)
         & songs['year'].isin(years)
         & songs['spotify_url']]
-
     playlist = playlist.sample(min(len(playlist), 10))
 
     if len(playlist) < 1:
-        return html.P('Please widen your selection.')
+        return html.P('Please widen your selection.'), 'hidden'
 
     song_list = [html.P(
         "{} by {}".format(song['title'], song['artist'])
     ) for i, song in playlist.iterrows()]
 
-    return [
-        html.H1("We sampled {} songs from your selection:".format(len(playlist)))
-    ] + song_list
+    return (
+        [html.H1("We sampled {} songs from your selection:".format(len(playlist)))
+        ] + song_list,
+        ''
+    )
 
-@app.callback(
-    Output(component_id='add-to-spotify', component_property='children'),
-    [Input('add-to-spotify', 'n_clicks')])
-def update_spotify(n_clicks):
-    return 'Added to Spotify' if n_clicks > 0 else 'Add to Spotify'
 
 if __name__ == '__main__':
     app.run_server(debug = True)
