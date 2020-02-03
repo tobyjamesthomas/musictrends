@@ -2,6 +2,8 @@
 ––––––––––––––––––––––––––––––––––––––––––––––––––
 - Base Styles
 - Spacing
+- Modal
+- Footer
 */
 
 /* Base Styles
@@ -15,11 +17,75 @@ body {
 
 /* Spacing
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
-#_dash-app-content {
-  padding-top: 30px; }
+h1 {
+  margin-top: 30px; }
 #genres,
 #measurement,
 #music-trends,
 #year-slider,
-#music-billboard {
-  margin-bottom: 30px; }
+#music-billboard,
+.modal-button {
+  margin-bottom: 2rem; }
+
+/* Modal
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+/* https://codepen.io/timothylong/pen/HhAer */
+
+.modal-window {
+  position: fixed;
+  background-color: rgba(255, 255, 255, 0.25);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 999;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  border-radius: 2rem; }
+.modal-window:target {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto; }
+.modal-window > div {
+  width: 400px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  padding: 2em;
+  background: #ffffff;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.3);
+  border-radius: 6px; }
+.modal-window header {
+  font-weight: bold; }
+.modal-window h1 {
+  font-size: 150%;
+  margin: 0 0 15px; }
+.modal-close {
+  color: #aaa;
+  line-height: 50px;
+  font-size: 80%;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 0;
+  width: 70px;
+  text-decoration: none; }
+.modal-close:hover {
+  color: black; }
+.modal-window div:not(:last-of-type) {
+  margin-bottom: 15px; } 
+small {
+  color: #aaa; }
+
+/* Footer
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.footer {
+  text-align: center;
+  margin-top: 4rem;
+  margin-bottom: 2rem;
+}

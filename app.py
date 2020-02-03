@@ -59,6 +59,14 @@ colors = {
 
 app.layout = html.Div([
 
+    html.H1('Music Trends in the Billboard Top 100 Songs'),
+
+    html.Div([
+        html.Div([
+            html.A('About this data', className='button', href='#about'),
+        ], className='interior'),
+    ], className='modal-button'),
+
     html.Label('Genres'),
     dcc.Dropdown(
         id='genres',
@@ -95,6 +103,20 @@ app.layout = html.Div([
     ),
 
     dcc.Graph(id='music-billboard'),
+
+    html.Div([
+        html.P('Made with 💙for Apple'),
+    ], className='footer'),
+
+    html.Div([
+        html.Div([
+            html.A('Close', className='modal-close', title='close', href='#'),
+            html.H1('Data'),
+            html.P('''
+                This dataset originates from the Billboard\'s Top 100 songs over the years 1950-2015.
+            '''),
+        ]),
+    ], id='about', className='modal-window'),
 ])
 
 @app.callback(
@@ -167,4 +189,4 @@ def update_graph(genres, year_range):
 
 
 if __name__ == '__main__':
-    app.run_server()
+    app.run_server(debug = True)
